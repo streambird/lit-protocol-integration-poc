@@ -8,6 +8,7 @@ import {
   joinSignature,
 } from "@ethersproject/bytes";
 import { recoverPublicKey, computePublicKey } from "@ethersproject/signing-key";
+import keccak256 from "keccak256"
 
 // this code will be run on the node
 const litActionCode = `
@@ -31,21 +32,26 @@ const authSig = {
   address: "0x9D1a5EC58232A894eBFcB5e466E3075b23101B89",
 };
 
+const message = "Hello World"
+const metamaskMsg = "\x19Ethereum Signed Message:\n" + message.length + message
+
 const go = async () => {
   const litNodeClient = new LitJsSdk.LitNodeClient({ litNetwork: "serrano" });
   await litNodeClient.connect();
+  const msgArr = [...keccak256(Buffer.from(metamaskMsg))];
   const signatures = await litNodeClient.executeJs({
     code: litActionCode,
     jsParams: {
-      // this is the string "Hello World" for testing
-      toSign: [72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100],
+      // data assumes message = "Hello World" with prefix added in the following format
+      // keccak256("\x19Ethereum Signed Message:\n" + len(message) + message) as buffer array
+      toSign: msgArr,
       keyId: 1,
-      sigName: "sig1",
+      sigName: "tim",
     },
     authSig,
   });
   console.log("signatures: ", signatures);
-  const sig = signatures.sig1;
+  const sig = signatures.tim;
   const dataSigned = "0x" + sig.dataSigned;
   const encodedSig = joinSignature({
     r: "0x" + sig.r,

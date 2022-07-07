@@ -1,7 +1,7 @@
 {
-
   "type": "module",
   "dependencies": {
+    "keccak256": "^1.0.6",
     "lit-js-sdk": "^1.2.1"
   }
 }
