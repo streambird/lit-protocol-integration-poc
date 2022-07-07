@@ -65,7 +65,6 @@ const go = async () => {
   console.log("compressed recoveredPubkey", compressedRecoveredPubkey);
   const recoveredAddress = recoverAddress(dataSigned, encodedSig);
   console.log("recoveredAddress", recoveredAddress);
-  console.log("encoded sig: ", encodedSig)
 };
 
 go();
