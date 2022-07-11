@@ -45,7 +45,7 @@ const go = async () => {
       // data assumes message = "Hello World" with prefix added in the following format
       // keccak256("\x19Ethereum Signed Message:\n" + len(message) + message) as buffer array
       toSign: msgArr,
-      keyId: 1,
+      keyId: "1",
       sigName: "tim",
     },
     authSig,
