@@ -8,6 +8,9 @@ import {
   joinSignature,
 } from "@ethersproject/bytes";
 import { recoverPublicKey, computePublicKey } from "@ethersproject/signing-key";
+import { ethers } from "ethers";
+import keccak256 from "keccak256"
+import Web3 from "web3";
 
 // this code will be run on the node
 const litActionCode = `
@@ -21,6 +24,7 @@ const go = async () => {
 go();
 `;
 
+
 // you need an AuthSig to auth with the nodes
 // normally you would obtain an AuthSig by calling LitJsSdk.checkAndSignAuthMessage({chain})
 const authSig = {
@@ -32,25 +36,38 @@ const authSig = {
 };
 
 const go = async () => {
-  
-  const txParams = {
-    nonce: "0x0",
-    gasPrice: "0x2e90edd000",
-    gasLimit: "0x7530",
-    to: "0x50e2dac5e78B5905CB09495547452cEE64426db2",
-    value: "0x2710",
-    chainId: 137,
-  };
+  const provider = new ethers.providers.InfuraProvider("rinkeby", "03193ed3c64a4ef6973a1a0300b16eb9");
 
   const litNodeClient = new LitJsSdk.LitNodeClient({ litNetwork: "serrano" });
   await litNodeClient.connect();
-  // TODO(Q): Convert tx params into uint8 that is compatible
-  const txArr = []; 
+
+  let gasPrice = await provider.send("eth_gasPrice")
+
+  const txParams = {
+    gasPrice: gasPrice,
+    gasLimit: "0x" + (30000).toString(16),
+    to: "0x35aB7b80404Df4C07bcA5db9bb2F916ed9BC8B21",
+    value: ethers.utils.parseUnits("0.000000000001", "ether"),
+    chainId: 4
+  };
+
+  console.log('gasPrice', gasPrice)
+  console.log('parseIntgasPrice', Web3.utils.toDecimal(gasPrice))
+  console.log('vaue', ethers.utils.parseUnits("0.000000000001", "ether").toNumber())
+
+  let price = Web3.utils.toDecimal(gasPrice) * ethers.utils.parseUnits("0.000000000001", "ether").toNumber();
+  console.log('gasPricegasPricegasPrice', price)
+
+  var txParamsBuffer = Buffer.from(JSON.stringify(txParams))
+  const msgArr = [...keccak256(txParamsBuffer)];
+
+  console.log('msgArr', msgArr)
+
   const signatures = await litNodeClient.executeJs({
     code: litActionCode,
     jsParams: {
-      toSign: txArr,
-      keyId: 1,
+      toSign: msgArr,
+      keyId: "1",
       sigName: "tim",
     },
     authSig,
@@ -63,7 +80,7 @@ const go = async () => {
     s: "0x" + sig.s,
     v: sig.recid,
   });
-  
+
   console.log("encodedSig", encodedSig);
   console.log("sig length in bytes: ", encodedSig.substring(2).length / 2);
   console.log("dataSigned", dataSigned);
@@ -77,8 +94,22 @@ const go = async () => {
   const recoveredAddress = recoverAddress(dataSigned, encodedSig);
   console.log("recoveredAddress", recoveredAddress);
 
+  // const txParams = {
+  //   nonce: "0x0",
+  //   gasPrice: "0x2e90edd000", // 200 gwei
+  //   gasLimit: "0x" + (30000).toString(16), // 30k gas limit should be enough.  only need 21k to send.
+  //   to: "0x50e2dac5e78B5905CB09495547452cEE64426db2",
+  //   value: "0x" + (10000).toString(16),
+  //   chainId,
+  // };
+
   const txn = serialize(txParams, encodedSig);
+
   console.log("txn", txn);
+
+  const txnHash = await provider.send("eth_sendRawTransaction", [txn]);
+
+  console.log('txnHash', txnHash)
 };
 
 go();
