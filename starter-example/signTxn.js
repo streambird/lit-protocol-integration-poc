@@ -37,7 +37,7 @@ const authSig = {
 
 const go = async () => {
   const provider = new ethers.providers.InfuraProvider("rinkeby", "03193ed3c64a4ef6973a1a0300b16eb9");
-
+  const CHAIN_ID = 4; // 4 = infura rinkeby
   const litNodeClient = new LitJsSdk.LitNodeClient({ litNetwork: "serrano" });
   await litNodeClient.connect();
 
@@ -65,16 +65,18 @@ const go = async () => {
   const nonce = await getNonce(fromAddress);
   console.log("latest nonce: ", nonce);
 
+  let gasPrice = await provider.send("eth_gasPrice")
+
   const txParams = {
     nonce: nonce,
-    gasPrice: ethers.utils.parseUnits("1.1", "gwei"),
+    gasPrice: gasPrice,
     gasLimit: 30000,
     to: "0x35aB7b80404Df4C07bcA5db9bb2F916ed9BC8B21",
     value: ethers.utils.parseEther("0.000001"),
-    chainId: 4,
+    chainId: CHAIN_ID,
   };
 
-  const serializedTx = ethers.utils.serializeTransaction(txParams)
+  const serializedTx = serialize(txParams)
   console.log("serializedTx", serializedTx);
 
   const rlpEncodedTxn = ethers.utils.arrayify(serializedTx);
@@ -89,7 +91,7 @@ const go = async () => {
   const signatures = await litNodeClient.executeJs({
     code: litActionCode,
     jsParams: {
-      toSign:  toSign,
+      toSign: toSign,
       keyId: "1",
       sigName: "tim",
     },
