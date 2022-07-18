@@ -5,7 +5,7 @@ import { recoverAddress, recoverPublicKey } from 'ethers/lib/utils'
 export const litProtocolSignTypedDataV1 = async (message: any) => {
     try {
         const litProtocol = LitProtocolUtils;
-        const [message] = payload.params
+        // const [message] = payload.params
         const signatureHash = typedSignatureHash(message)
         console.log('signatureHash:', signatureHash)
         const keccak256Hash = litProtocol.getKeccak256Hash(signatureHash)
