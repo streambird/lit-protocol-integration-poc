@@ -2,10 +2,24 @@ import MetamaskSignUtil, { typedSignatureHash, recoverTypedSignature } from '@me
 import { LitProtocolUtils } from './lit-protocol-utils'
 import { recoverAddress, recoverPublicKey } from 'ethers/lib/utils'
 
+const litProtocol = new LitProtocolUtils();
+
 export const litProtocolSignTypedDataV1 = async (message: any) => {
     try {
-        const litProtocol = LitProtocolUtils;
+        
         // const [message] = payload.params
+        const message = [
+        {
+            type: 'string',
+            name: 'fullName',
+            value: 'John Doe',
+            
+        }, 
+        {
+            type: 'uint32',
+            name: 'userId',
+            value: '1234',
+        }];
         const signatureHash = typedSignatureHash(message)
         console.log('signatureHash:', signatureHash)
         const keccak256Hash = litProtocol.getKeccak256Hash(signatureHash)
