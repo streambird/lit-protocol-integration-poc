@@ -16,6 +16,48 @@ import jssha3 from 'js-sha3';
 // this code will be run on the node
 const litActionCode = `
 const go = async () => {  
+  const SB_ME_API_URL = "https://api-staging.streambird.io/v1/auth/users/public/me";
+  let addressFound = false;
+
+  let headers = {
+    Authorization: 'PublicToken ' + streambirdPublicToken,
+    'X-Streambird-Session-Token': streambirdSessionToken
+  }
+
+  const meResponse = await fetch(SB_ME_API_URL, {
+    method: 'GET',
+    headers: headers
+  });
+
+  const meResponseData = await meResponse.json();
+
+  if (meResponse.ok) {
+    if (meResponseData.wallets && meResponseData.wallets.length > 0) {
+      for (let i = 0; i < meResponseData.wallets.length; i++) {
+        let wallet = meResponseData.wallets[i];
+
+        if(wallet.is_read_only) {
+          if(wallet_type === 'ETH') {
+            if(public_address.toLowerCase() === keyId.toLowerCase()) {
+              addressFound = true;
+              break;
+            }
+          } else if(wallet_type === 'SOL') {
+            if(public_address === keyId) {
+              addressFound = true;
+              break;
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  if(!addressFound) {
+    return;
+  }
+
   // this requests a signature share from the Lit Node
   // the signature share will be automatically returned in the HTTP response from the node
   // all the params (toSign, keyId, sigName) are passed in from the LitJsSdk.executeJs() function
@@ -96,11 +138,18 @@ const go = async () => {
       toSign: toSign,
       keyId: "1",
       sigName: "tim",
+      streambirdPublicToken: "pk_dev_ZXfTCQFbsfzHCnOUg2s1AK7VXNTHkZ8AgM7AhtRo1q7G3vHJ",
+      streambirdSessionToken: "aV2Bce2KQdxfRfYCt8jt8E6wDfe2Rz7t8mAwzAuoJLDgXykrreif5ai1p6PzICAS"
     },
     authSig,
   });
+  console.log('signatures', signatures)
   
-  const sig = signatures.tim;
+  // 1.2.5 has an extra envelope signatures.signatures.tim
+  // 1.2.1 had signatures.tim
+
+  const sig = signatures.signatures.tim;
+  console.log('sig', sig)
   const dataSigned = "0x" + sig.dataSigned;
   const encodedSig = joinSignature({
     r: "0x" + sig.r,

@@ -8,7 +8,7 @@ import {
 } from "@ethersproject/transactions"
 
 import { recoverPublicKey, verifyMessage } from 'ethers/lib/utils'
-import jssha3 from 'js-sha3'
+import { keccak256 } from 'js-sha3'
 
 const litActionCode = `
 const go = async () => {  
@@ -105,7 +105,7 @@ export class LitProtocolUtils {
 
   getKeccak256Hash(serialized: string) {
     const rlpEncoded = ethers.utils.arrayify(serialized)
-    const keccak256Hash = jssha3.keccak256.digest(rlpEncoded)
+    const keccak256Hash = keccak256.digest(rlpEncoded)
     return keccak256Hash
   }
 
