@@ -91,7 +91,7 @@ export class LitProtocolUtils {
     await this.client.connect()
   }
 
-  async executeJS(keccak256Hash: number[]) {
+  async executeJS(keccak256Hash: any) {
     const { signatures } = await this.client.executeJs({
       code: LIT_PROTOCOL_ACTION_SIGN_ECDSA,
       jsParams: {
