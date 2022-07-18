@@ -1,4 +1,4 @@
-import MetamaskSignUtil, { typedSignatureHash, recoverTypedSignature } from '@metamask/eth-sig-util'
+import { SignTypedDataVersion, typedSignatureHash, recoverTypedSignature } from '@metamask/eth-sig-util'
 import { LitProtocolUtils } from './lit-protocol-utils'
 import { recoverAddress, recoverPublicKey } from 'ethers/lib/utils'
 
@@ -19,7 +19,7 @@ export const litProtocolSignTypedDataV1 = async (message: any) => {
         const recoverTypedData = recoverTypedSignature({
             data: message,
             signature: encodedSignature,
-            version: 'V1' as MetamaskSignUtil.SignTypedDataVersion
+            version: 'V1' as SignTypedDataVersion
         })
         console.log('recoverTypedData:',recoverTypedData)
         console.log("encodedSignature: ", encodedSignature)
