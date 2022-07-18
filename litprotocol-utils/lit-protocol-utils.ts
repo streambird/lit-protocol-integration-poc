@@ -1,4 +1,5 @@
 import LitJsSdk from 'lit-js-sdk'
+// import LitJsSdk from "lit-js-sdk/build/index.node.js";
 import { ethers } from "ethers"
 import { joinSignature } from "@ethersproject/bytes"
 import {
