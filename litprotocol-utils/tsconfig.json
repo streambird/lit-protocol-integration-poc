@@ -1,18 +1,25 @@
 {
+    "include": ["./src/*"],
     "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
-        "noImplicitAny": true,
-        "moduleResolution": "node",
-        "sourceMap": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*",
-                "src/types/*"
-            ]
-        }
-    }
-}
+      "module": "ES2020",
+      "target": "ES2020",
+      "resolveJsonModule": false,
+      "moduleResolution": "Node",
+      "allowSyntheticDefaultImports": true,
+      "importHelpers": true,
+      "removeComments": true,
+      "declaration": true,
+      "sourceMap": true,
+      "rootDir": "src",
+      "outDir": "dist",
+      "strict": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "jsx": "react"
+    },
+    "exclude": ["node_modules"]
+  }
