@@ -1,4 +1,6 @@
 import { litProtocolSignTypedDataV1 } from './signTypedTx'
+// import fetch from 'node-fetch'
+// (globalThis as any).fetch = fetch
 
 const go = async () => {
     // TODO(JL): 

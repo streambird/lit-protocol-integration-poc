@@ -6,6 +6,7 @@ const litProtocol = new LitProtocolUtils();
 
 export const litProtocolSignTypedDataV1 = async (message: any) => {
     try {
+        await litProtocol.connected
         const signatureHash = typedSignatureHash(message)
         console.log('signatureHash:', signatureHash)
         const keccak256Hash = litProtocol.getKeccak256Hash(signatureHash)
