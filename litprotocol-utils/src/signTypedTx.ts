@@ -17,12 +17,12 @@ export const litProtocolSignTypedDataV1 = async (message: any) => {
         const recoveredAddress = recoverAddress(messageHash, encodedSignature)
         console.log('recoveredPubkey:',recoveredPubkey)
         console.log('recoveredAddress:',recoveredAddress)
-        const recoverTypedData = recoverTypedSignature({
+        const recoverTypedDataAddress = recoverTypedSignature({
             data: message,
             signature: encodedSignature,
             version: 'V1' as SignTypedDataVersion
         })
-        console.log('recoverTypedData:',recoverTypedData)
+        console.log('recoverTypedDataAddress:',recoverTypedDataAddress)
         console.log("encodedSignature: ", encodedSignature)
     } catch(error) {
         console.log("error: ", error)
