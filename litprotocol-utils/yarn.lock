@@ -1355,15 +1355,6 @@ node-fetch@^3.2.3:
     fetch-blob "^3.1.4"
     formdata-polyfill "^4.0.10"
 
-node-fetch@^3.2.9:
-  version "3.2.9"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-3.2.9.tgz#3f6070bf854de20f21b9fe8479f823462e615d7d"
-  integrity sha512-/2lI+DBecVvVm9tDhjziTVjo2wmTsSxSk58saUYP0P/fRJ3xxtfMDY24+CKTkfm0Dlhyn3CSXNL0SoRiCZ8Rzg==
-  dependencies:
-    data-uri-to-buffer "^4.0.0"
-    fetch-blob "^3.1.4"
-    formdata-polyfill "^4.0.10"
-
 node-gyp-build@^4.2.0, node-gyp-build@^4.3.0:
   version "4.5.0"
   resolved "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.5.0.tgz"
